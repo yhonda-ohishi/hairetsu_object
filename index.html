@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript 配列・オブジェクト練習</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .progress {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        main {
+            padding: 30px;
+        }
+
+        .category-section {
+            margin-bottom: 50px;
+        }
+
+        .category-info {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+        }
+
+        .category-info h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .category-info p {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .problems {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .problem {
+            background: #ffffff;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .problem:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.1);
+        }
+
+        .problem h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .problem-description {
+            margin-bottom: 15px;
+        }
+
+        .problem-description p {
+            color: #333;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .example {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .example strong {
+            color: #667eea;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .example pre {
+            background: #2d3748;
+            color: #68d391;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .data-display {
+            background: #2d3748;
+            color: #68d391;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+
+        .code-input {
+            margin-bottom: 15px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            border: 2px solid #e9ecef;
+            border-radius: 5px;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .run-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .run-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .run-btn:active {
+            transform: translateY(0);
+        }
+
+        .results {
+            margin-top: 15px;
+        }
+
+        .console-output {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .test-result {
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 5px;
+            border-left: 4px solid;
+        }
+
+        .test-result.success {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .test-result.failure {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+
+        .test-result.error {
+            background: #fff3cd;
+            border-color: #ffc107;
+            color: #856404;
+        }
+
+        .test-info {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .summary {
+            text-align: center;
+            padding: 15px;
+            background: #e7f3ff;
+            border-radius: 5px;
+            margin-top: 15px;
+            font-weight: bold;
+            color: #0056b3;
+        }
+
+        .divider {
+            height: 3px;
+            background: linear-gradient(to right, #667eea, #764ba2);
+            margin: 50px 0;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>JavaScript 配列・オブジェクト練習</h1>
+            <div class="progress">
+                <span>console.log練習20問 + 関数作成18問</span>
+            </div>
+        </header>
+
+        <main id="mainContent">
+            <!-- JavaScriptで動的に生成 -->
+        </main>
+    </div>
+
+    <script>
+        // console.log練習問題データ
+        const consoleLogCategories = [
+            {
+                title: "カテゴリ0-1: 配列の基本",
+                description: "配列から値を取り出してconsole.logで表示しましょう",
+                type: "console",
+                problems: [
+                    {
+                        description: "配列 fruits の最初の要素をconsole.logで表示してください。",
+                        data: "const fruits = ['apple', 'banana', 'orange'];",
+                        expectedOutput: "apple"
+                    },
+                    {
+                        description: "配列 numbers の2番目の要素（インデックス1）をconsole.logで表示してください。",
+                        data: "const numbers = [10, 20, 30, 40];",
+                        expectedOutput: "20"
+                    },
+                    {
+                        description: "配列 colors の最後の要素をconsole.logで表示してください。",
+                        data: "const colors = ['red', 'green', 'blue'];",
+                        expectedOutput: "blue"
+                    },
+                    {
+                        description: "配列 scores の最初の要素をconsole.logで表示してください。",
+                        data: "const scores = [85, 92, 78, 95];",
+                        expectedOutput: "85"
+                    },
+                    {
+                        description: "配列 cities の3番目の要素（インデックス2）をconsole.logで表示してください。",
+                        data: "const cities = ['Tokyo', 'Osaka', 'Kyoto', 'Fukuoka'];",
+                        expectedOutput: "Kyoto"
+                    }
+                ]
+            },
+            {
+                title: "カテゴリ0-2: オブジェクトの基本",
+                description: "オブジェクトからプロパティを取り出してconsole.logで表示しましょう",
+                type: "console",
+                problems: [
+                    {
+                        description: "オブジェクト person の name プロパティをconsole.logで表示してください。",
+                        data: "const person = { name: 'Taro', age: 25 };",
+                        expectedOutput: "Taro"
+                    },
+                    {
+                        description: "オブジェクト car の model プロパティをconsole.logで表示してください。",
+                        data: "const car = { brand: 'Toyota', model: 'Prius', year: 2020 };",
+                        expectedOutput: "Prius"
+                    },
+                    {
+                        description: "オブジェクト student の age プロパティをconsole.logで表示してください。",
+                        data: "const student = { name: 'Hanako', age: 20, grade: 'A' };",
+                        expectedOutput: "20"
+                    },
+                    {
+                        description: "オブジェクト book の title プロパティをconsole.logで表示してください。",
+                        data: "const book = { title: 'JavaScript入門', author: '山田太郎', pages: 300 };",
+                        expectedOutput: "JavaScript入門"
+                    },
+                    {
+                        description: "オブジェクト product の price プロパティをconsole.logで表示してください。",
+                        data: "const product = { name: 'ノートパソコン', price: 80000, stock: 5 };",
+                        expectedOutput: "80000"
+                    }
+                ]
+            },
+            {
+                title: "カテゴリ0-3: 配列の中のオブジェクト（基本）",
+                description: "配列の中のオブジェクトから値を取り出してconsole.logで表示しましょう",
+                type: "console",
+                problems: [
+                    {
+                        description: "配列 users の最初のオブジェクトの name プロパティをconsole.logで表示してください。",
+                        data: "const users = [{ name: 'Taro', age: 25 }, { name: 'Hanako', age: 30 }];",
+                        expectedOutput: "Taro"
+                    },
+                    {
+                        description: "配列 products の2番目のオブジェクト（インデックス1）の price プロパティをconsole.logで表示してください。",
+                        data: "const products = [{ name: 'Apple', price: 100 }, { name: 'Banana', price: 80 }];",
+                        expectedOutput: "80"
+                    },
+                    {
+                        description: "配列 students の最初のオブジェクトの grade プロパティをconsole.logで表示してください。",
+                        data: "const students = [{ name: 'Ken', grade: 'A' }, { name: 'Yuki', grade: 'B' }];",
+                        expectedOutput: "A"
+                    },
+                    {
+                        description: "配列 cars の2番目のオブジェクト（インデックス1）の brand プロパティをconsole.logで表示してください。",
+                        data: "const cars = [{ brand: 'Toyota', model: 'Prius' }, { brand: 'Honda', model: 'Civic' }];",
+                        expectedOutput: "Honda"
+                    },
+                    {
+                        description: "配列 books の最初のオブジェクトの author プロパティをconsole.logで表示してください。",
+                        data: "const books = [{ title: 'JavaScript入門', author: '山田太郎' }, { title: 'React入門', author: '佐藤花子' }];",
+                        expectedOutput: "山田太郎"
+                    }
+                ]
+            },
+            {
+                title: "カテゴリ0-4: 配列の中のオブジェクト（応用）",
+                description: "より複雑な配列とオブジェクトから値を取り出してconsole.logで表示しましょう",
+                type: "console",
+                problems: [
+                    {
+                        description: "配列 employees の3番目のオブジェクト（インデックス2）の name プロパティをconsole.logで表示してください。",
+                        data: "const employees = [{ name: 'Taro', dept: 'Sales' }, { name: 'Hanako', dept: 'HR' }, { name: 'Ken', dept: 'IT' }];",
+                        expectedOutput: "Ken"
+                    },
+                    {
+                        description: "配列 items の最初のオブジェクトの stock プロパティをconsole.logで表示してください。",
+                        data: "const items = [{ name: 'Laptop', price: 80000, stock: 5 }, { name: 'Mouse', price: 2000, stock: 20 }];",
+                        expectedOutput: "5"
+                    },
+                    {
+                        description: "配列 courses の2番目のオブジェクト（インデックス1）の duration プロパティをconsole.logで表示してください。",
+                        data: "const courses = [{ title: 'JavaScript', duration: 30 }, { title: 'React', duration: 20 }, { title: 'Node.js', duration: 25 }];",
+                        expectedOutput: "20"
+                    },
+                    {
+                        description: "配列 orders の最初のオブジェクトの quantity プロパティをconsole.logで表示してください。",
+                        data: "const orders = [{ item: 'Book', quantity: 3, price: 1500 }, { item: 'Pen', quantity: 10, price: 100 }];",
+                        expectedOutput: "3"
+                    },
+                    {
+                        description: "配列 members の3番目のオブジェクト（インデックス2）の email プロパティをconsole.logで表示してください。",
+                        data: "const members = [{ name: 'Alice', email: 'alice@example.com' }, { name: 'Bob', email: 'bob@example.com' }, { name: 'Charlie', email: 'charlie@example.com' }];",
+                        expectedOutput: "charlie@example.com"
+                    }
+                ]
+            }
+        ];
+
+        // 関数作成問題データ（既存のもの）
+        const functionCategories = [
+            {
+                title: "カテゴリ1: 配列の基本アクセス",
+                description: "配列から要素を取得する関数を作成しましょう",
+                type: "function",
+                problems: [
+                    {
+                        description: "配列を受け取って、最初の要素を返す関数 getFirst を作成してください。",
+                        example: "getFirst([1, 2, 3]) → 1\ngetFirst(['a', 'b', 'c']) → 'a'",
+                        tests: [
+                            { input: [[1, 2, 3]], expected: 1 },
+                            { input: [['a', 'b', 'c']], expected: 'a' },
+                            { input: [[10, 20, 30, 40]], expected: 10 }
+                        ]
+                    },
+                    {
+                        description: "配列を受け取って、配列の長さを返す関数 getLength を作成してください。",
+                        example: "getLength([1, 2, 3]) → 3\ngetLength(['a', 'b']) → 2",
+                        tests: [
+                            { input: [[1, 2, 3]], expected: 3 },
+                            { input: [['a', 'b']], expected: 2 },
+                            { input: [[10, 20, 30, 40, 50]], expected: 5 }
+                        ]
+                    },
+                    {
+                        description: "配列を受け取って、最後の要素を返す関数 getLast を作成してください。<br><strong>ヒント:</strong> 配列の長さは arr.length で取得できます。最後の要素のインデックスは arr.length - 1 です。",
+                        example: "getLast([1, 2, 3]) → 3\ngetLast(['a', 'b', 'c']) → 'c'",
+                        tests: [
+                            { input: [[1, 2, 3]], expected: 3 },
+                            { input: [['a', 'b', 'c']], expected: 'c' },
+                            { input: [[10, 20, 30, 40]], expected: 40 }
+                        ]
+                    }
+                ]
+            },
+            {
+                title: "カテゴリ2: 配列とオブジェクト",
+                description: "配列の中のオブジェクトを操作する関数を作成しましょう",
+                type: "function",
+                problems: [
+                    {
+                        description: "オブジェクトの配列を受け取って、最初のオブジェクトを返す関数 getFirstObject を作成してください。",
+                        example: "getFirstObject([{name: 'Taro'}, {name: 'Hanako'}]) → {name: 'Taro'}",
+                        tests: [
+                            { input: [[{name: 'Taro'}, {name: 'Hanako'}]], expected: {name: 'Taro'} },
+                            { input: [[{age: 20}, {age: 30}]], expected: {age: 20} },
+                            { input: [[{id: 1}, {id: 2}, {id: 3}]], expected: {id: 1} }
+                        ]
+                    },
+                    {
+                        description: "オブジェクトの配列を受け取って、最初のオブジェクトの name プロパティを返す関数 getNameFromFirst を作成してください。",
+                        example: "getNameFromFirst([{name: 'Taro'}, {name: 'Hanako'}]) → 'Taro'",
+                        tests: [
+                            { input: [[{name: 'Taro'}, {name: 'Hanako'}]], expected: 'Taro' },
+                            { input: [[{name: 'Alice'}, {name: 'Bob'}]], expected: 'Alice' },
+                            { input: [[{name: 'Ken'}, {name: 'Yuki'}]], expected: 'Ken' }
+                        ]
+                    },
+                    {
+                        description: "オブジェクトの配列を受け取って、最初のオブジェクトを返す関数 getFirstItem を作成してください。",
+                        example: "getFirstItem([{id: 100}, {id: 200}]) → {id: 100}",
+                        tests: [
+                            { input: [[{id: 100}, {id: 200}]], expected: {id: 100} },
+                            { input: [[{price: 500}, {price: 1000}]], expected: {price: 500} },
+                            { input: [[{city: 'Tokyo'}, {city: 'Osaka'}]], expected: {city: 'Tokyo'} }
+                        ]
+                    },
+                    {
+                        description: "オブジェクトの配列を受け取って、最初のオブジェクトの age プロパティを返す関数 getAgeFromFirst を作成してください。",
+                        example: "getAgeFromFirst([{name: 'Taro', age: 20}, {name: 'Hanako', age: 25}]) → 20",
+                        tests: [
+                            { input: [[{name: 'Taro', age: 20}, {name: 'Hanako', age: 25}]], expected: 20 },
+                            { input: [[{name: 'Alice', age: 30}, {name: 'Bob', age: 35}]], expected: 30 },
+                            { input: [[{name: 'Ken', age: 40}, {name: 'Yuki', age: 45}]], expected: 40 }
+                        ]
+                    },
+                    {
+                        description: "配列を受け取って、配列の要素数を返す関数 countItems を作成してください。",
+                        example: "countItems([1, 2, 3]) → 3\ncountItems(['a', 'b']) → 2",
+                        tests: [
+                            { input: [[1, 2, 3]], expected: 3 },
+                            { input: [['a', 'b']], expected: 2 },
+                            { input: [[{name: 'A'}, {name: 'B'}, {name: 'C'}]], expected: 3 }
+                        ]
+                    },
+                    {
+                        description: "配列を受け取って、配列の要素数を返す関数 arrayLength を作成してください。",
+                        example: "arrayLength([10, 20, 30, 40]) → 4\narrayLength(['x', 'y', 'z']) → 3",
+                        tests: [
+                            { input: [[10, 20, 30, 40]], expected: 4 },
+                            { input: [['x', 'y', 'z']], expected: 3 },
+                            { input: [[{id: 1}, {id: 2}]], expected: 2 }
+                        ]
+                    }
+                ]
+            },
+            {
+                title: "カテゴリ3: オブジェクトのプロパティアクセス",
+                description: "オブジェクトからプロパティを取得する関数を作成しましょう",
+                type: "function",
+                problems: [
+                    {
+                        description: "オブジェクトを受け取って、name プロパティを返す関数 getName を作成してください。",
+                        example: "getName({name: 'Taro', age: 20}) → 'Taro'",
+                        tests: [
+                            { input: [{name: 'Taro', age: 20}], expected: 'Taro' },
+                            { input: [{name: 'Hanako', age: 25}], expected: 'Hanako' },
+                            { input: [{name: 'Ken', age: 30}], expected: 'Ken' }
+                        ]
+                    },
+                    {
+                        description: "オブジェクトを受け取って、age プロパティを返す関数 getAge を作成してください。",
+                        example: "getAge({name: 'Taro', age: 20}) → 20",
+                        tests: [
+                            { input: [{name: 'Taro', age: 20}], expected: 20 },
+                            { input: [{name: 'Hanako', age: 25}], expected: 25 },
+                            { input: [{name: 'Ken', age: 30}], expected: 30 }
+                        ]
+                    },
+                    {
+                        description: "オブジェクトを受け取って、name プロパティを返す関数 getPersonName を作成してください。",
+                        example: "getPersonName({name: 'Alice', age: 35}) → 'Alice'",
+                        tests: [
+                            { input: [{name: 'Alice', age: 35}], expected: 'Alice' },
+                            { input: [{name: 'Bob', age: 40}], expected: 'Bob' },
+                            { input: [{name: 'Carol', age: 28}], expected: 'Carol' }
+                        ]
+                    },
+                    {
+                        description: "オブジェクトを受け取って、city プロパティを返す関数 getCity を作成してください。",
+                        example: "getCity({city: 'Tokyo', country: 'Japan'}) → 'Tokyo'",
+                        tests: [
+                            { input: [{city: 'Tokyo', country: 'Japan'}], expected: 'Tokyo' },
+                            { input: [{city: 'Osaka', country: 'Japan'}], expected: 'Osaka' },
+                            { input: [{city: 'Kyoto', country: 'Japan'}], expected: 'Kyoto' }
+                        ]
+                    },
+                    {
+                        description: "オブジェクトとキー名を受け取って、そのプロパティの値を返す関数 getProperty を作成してください。",
+                        example: "getProperty({name: 'Taro', age: 20}, 'name') → 'Taro'",
+                        tests: [
+                            { input: [{name: 'Taro', age: 20}, 'name'], expected: 'Taro' },
+                            { input: [{name: 'Hanako', age: 25}, 'age'], expected: 25 },
+                            { input: [{city: 'Tokyo', country: 'Japan'}, 'city'], expected: 'Tokyo' }
+                        ]
+                    },
+                    {
+                        description: "オブジェクトとキー名を受け取って、そのプロパティの値を返す関数 getValue を作成してください。",
+                        example: "getValue({id: 100, price: 500}, 'price') → 500",
+                        tests: [
+                            { input: [{id: 100, price: 500}, 'price'], expected: 500 },
+                            { input: [{id: 200, price: 1000}, 'id'], expected: 200 },
+                            { input: [{name: 'Product', stock: 50}, 'stock'], expected: 50 }
+                        ]
+                    }
+                ]
+            },
+            {
+                title: "カテゴリ4: オブジェクトの作成",
+                description: "値を受け取ってオブジェクトを作成する関数を作りましょう",
+                type: "function",
+                problems: [
+                    {
+                        description: "名前と年齢を受け取って、{name: 名前, age: 年齢} というオブジェクトを返す関数 createPerson を作成してください。",
+                        example: "createPerson('Taro', 20) → {name: 'Taro', age: 20}",
+                        tests: [
+                            { input: ['Taro', 20], expected: {name: 'Taro', age: 20} },
+                            { input: ['Hanako', 25], expected: {name: 'Hanako', age: 25} },
+                            { input: ['Ken', 30], expected: {name: 'Ken', age: 30} }
+                        ]
+                    },
+                    {
+                        description: "商品名と価格を受け取って、{name: 商品名, price: 価格} というオブジェクトを返す関数 createProduct を作成してください。",
+                        example: "createProduct('Apple', 100) → {name: 'Apple', price: 100}",
+                        tests: [
+                            { input: ['Apple', 100], expected: {name: 'Apple', price: 100} },
+                            { input: ['Banana', 150], expected: {name: 'Banana', price: 150} },
+                            { input: ['Orange', 200], expected: {name: 'Orange', price: 200} }
+                        ]
+                    },
+                    {
+                        description: "名前と年齢を受け取って、{name: 名前, age: 年齢} というオブジェクトを返す関数 makePerson を作成してください。",
+                        example: "makePerson('Alice', 35) → {name: 'Alice', age: 35}",
+                        tests: [
+                            { input: ['Alice', 35], expected: {name: 'Alice', age: 35} },
+                            { input: ['Bob', 40], expected: {name: 'Bob', age: 40} },
+                            { input: ['Carol', 28], expected: {name: 'Carol', age: 28} }
+                        ]
+                    },
+                    {
+                        description: "IDと名前を受け取って、{id: ID, name: 名前} というオブジェクトを返す関数 createItem を作成してください。",
+                        example: "createItem(1, 'Item A') → {id: 1, name: 'Item A'}",
+                        tests: [
+                            { input: [1, 'Item A'], expected: {id: 1, name: 'Item A'} },
+                            { input: [2, 'Item B'], expected: {id: 2, name: 'Item B'} },
+                            { input: [3, 'Item C'], expected: {id: 3, name: 'Item C'} }
+                        ]
+                    },
+                    {
+                        description: "名前、年齢、メールアドレスを受け取って、{name: 名前, age: 年齢, email: メール} というオブジェクトを返す関数 createUser を作成してください。",
+                        example: "createUser('Taro', 20, 'taro@example.com') → {name: 'Taro', age: 20, email: 'taro@example.com'}",
+                        tests: [
+                            { input: ['Taro', 20, 'taro@example.com'], expected: {name: 'Taro', age: 20, email: 'taro@example.com'} },
+                            { input: ['Hanako', 25, 'hanako@example.com'], expected: {name: 'Hanako', age: 25, email: 'hanako@example.com'} },
+                            { input: ['Ken', 30, 'ken@example.com'], expected: {name: 'Ken', age: 30, email: 'ken@example.com'} }
+                        ]
+                    },
+                    {
+                        description: "都市と国を受け取って、{city: 都市, country: 国} というオブジェクトを返す関数 createLocation を作成してください。",
+                        example: "createLocation('Tokyo', 'Japan') → {city: 'Tokyo', country: 'Japan'}",
+                        tests: [
+                            { input: ['Tokyo', 'Japan'], expected: {city: 'Tokyo', country: 'Japan'} },
+                            { input: ['Osaka', 'Japan'], expected: {city: 'Osaka', country: 'Japan'} },
+                            { input: ['Kyoto', 'Japan'], expected: {city: 'Kyoto', country: 'Japan'} }
+                        ]
+                    }
+                ]
+            },
+            {
+                title: "カテゴリ5: オブジェクトと配列の応用",
+                description: "オブジェクトと配列を組み合わせた関数を作成しましょう",
+                type: "function",
+                problems: [
+                    {
+                        description: "オブジェクト、キー、値を受け取って、そのキーと値を追加した新しいオブジェクトを返す関数 addToObject を作成してください。",
+                        example: "addToObject({name: 'Taro'}, 'age', 20) → {name: 'Taro', age: 20}",
+                        tests: [
+                            { input: [{name: 'Taro'}, 'age', 20], expected: {name: 'Taro', age: 20} },
+                            { input: [{city: 'Tokyo'}, 'country', 'Japan'], expected: {city: 'Tokyo', country: 'Japan'} },
+                            { input: [{id: 1}, 'name', 'Product'], expected: {id: 1, name: 'Product'} }
+                        ]
+                    },
+                    {
+                        description: "2つのオブジェクトを受け取って、両方のプロパティを持つ新しいオブジェクトを返す関数 mergeObjects を作成してください。",
+                        example: "mergeObjects({name: 'Taro'}, {age: 20}) → {name: 'Taro', age: 20}",
+                        tests: [
+                            { input: [{name: 'Taro'}, {age: 20}], expected: {name: 'Taro', age: 20} },
+                            { input: [{city: 'Tokyo'}, {country: 'Japan'}], expected: {city: 'Tokyo', country: 'Japan'} },
+                            { input: [{id: 1}, {name: 'Product', price: 100}], expected: {id: 1, name: 'Product', price: 100} }
+                        ]
+                    },
+                    {
+                        description: "オブジェクト、キー、値を受け取って、そのキーと値を追加した新しいオブジェクトを返す関数 addProperty を作成してください。",
+                        example: "addProperty({id: 100}, 'price', 500) → {id: 100, price: 500}",
+                        tests: [
+                            { input: [{id: 100}, 'price', 500], expected: {id: 100, price: 500} },
+                            { input: [{name: 'Alice'}, 'age', 30], expected: {name: 'Alice', age: 30} },
+                            { input: [{x: 10}, 'y', 20], expected: {x: 10, y: 20} }
+                        ]
+                    },
+                    {
+                        description: "2つのオブジェクトを受け取って、両方のプロパティを持つ新しいオブジェクトを返す関数 combineObjects を作成してください。",
+                        example: "combineObjects({id: 1}, {name: 'Item'}) → {id: 1, name: 'Item'}",
+                        tests: [
+                            { input: [{id: 1}, {name: 'Item'}], expected: {id: 1, name: 'Item'} },
+                            { input: [{x: 5}, {y: 10}], expected: {x: 5, y: 10} },
+                            { input: [{price: 100}, {stock: 50}], expected: {price: 100, stock: 50} }
+                        ]
+                    },
+                    {
+                        description: "オブジェクトを受け取って、そのプロパティの値を配列にして返す関数 objectToArray を作成してください。",
+                        example: "objectToArray({name: 'Taro', age: 20}) → ['Taro', 20]",
+                        tests: [
+                            { input: [{name: 'Taro', age: 20}], expected: ['Taro', 20] },
+                            { input: [{city: 'Tokyo', country: 'Japan'}], expected: ['Tokyo', 'Japan'] },
+                            { input: [{a: 1, b: 2, c: 3}], expected: [1, 2, 3] }
+                        ]
+                    },
+                    {
+                        description: "オブジェクトを受け取って、そのプロパティの値を配列にして返す関数 getValues を作成してください。",
+                        example: "getValues({x: 100, y: 200}) → [100, 200]",
+                        tests: [
+                            { input: [{x: 100, y: 200}], expected: [100, 200] },
+                            { input: [{id: 1, price: 500}], expected: [1, 500] },
+                            { input: [{name: 'Product', stock: 10}], expected: ['Product', 10] }
+                        ]
+                    }
+                ]
+            },
+            {
+                title: "カテゴリ6: 配列への要素追加",
+                description: "配列に要素を追加する関数を作成しましょう",
+                type: "function",
+                problems: [
+                    {
+                        description: "配列と値を受け取って、配列の最後に値を追加した新しい配列を返す関数 addToEnd を作成してください。<br><strong>ヒント:</strong> arr.concat(item) を使って新しい配列を作成できます。",
+                        example: "addToEnd([1, 2], 3) → [1, 2, 3]\naddToEnd(['a'], 'b') → ['a', 'b']",
+                        tests: [
+                            { input: [[1, 2], 3], expected: [1, 2, 3] },
+                            { input: [['a'], 'b'], expected: ['a', 'b'] },
+                            { input: [[10, 20], 30], expected: [10, 20, 30] }
+                        ]
+                    },
+                    {
+                        description: "配列と値を受け取って、配列の最初に値を追加した新しい配列を返す関数 addToStart を作成してください。<br><strong>ヒント:</strong> [item].concat(arr) を使って新しい配列を作成できます。",
+                        example: "addToStart([2, 3], 1) → [1, 2, 3]\naddToStart(['b'], 'a') → ['a', 'b']",
+                        tests: [
+                            { input: [[2, 3], 1], expected: [1, 2, 3] },
+                            { input: [['b'], 'a'], expected: ['a', 'b'] },
+                            { input: [[20, 30], 10], expected: [10, 20, 30] }
+                        ]
+                    },
+                    {
+                        description: "配列と値を受け取って、配列の最後に値を追加した新しい配列を返す関数 appendItem を作成してください。<br><strong>ヒント:</strong> arr.concat(item) を使って新しい配列を作成できます。",
+                        example: "appendItem([5, 10], 15) → [5, 10, 15]\nappendItem(['x'], 'y') → ['x', 'y']",
+                        tests: [
+                            { input: [[5, 10], 15], expected: [5, 10, 15] },
+                            { input: [['x'], 'y'], expected: ['x', 'y'] },
+                            { input: [[100, 200], 300], expected: [100, 200, 300] }
+                        ]
+                    },
+                    {
+                        description: "配列と値を受け取って、配列の最初に値を追加した新しい配列を返す関数 prependItem を作成してください。<br><strong>ヒント:</strong> [item].concat(arr) を使って新しい配列を作成できます。",
+                        example: "prependItem([20, 30], 10) → [10, 20, 30]\nprependItem(['y'], 'x') → ['x', 'y']",
+                        tests: [
+                            { input: [[20, 30], 10], expected: [10, 20, 30] },
+                            { input: [['y'], 'x'], expected: ['x', 'y'] },
+                            { input: [[50, 60], 40], expected: [40, 50, 60] }
+                        ]
+                    },
+                    {
+                        description: "配列と2つの値を受け取って、配列の最後に2つの値を追加した新しい配列を返す関数 addMultiple を作成してください。<br><strong>ヒント:</strong> arr.concat(item1, item2) を使って複数の要素を追加できます。",
+                        example: "addMultiple([1], 2, 3) → [1, 2, 3]\naddMultiple(['a'], 'b', 'c') → ['a', 'b', 'c']",
+                        tests: [
+                            { input: [[1], 2, 3], expected: [1, 2, 3] },
+                            { input: [['a'], 'b', 'c'], expected: ['a', 'b', 'c'] },
+                            { input: [[10, 20], 30, 40], expected: [10, 20, 30, 40] }
+                        ]
+                    },
+                    {
+                        description: "配列と2つの値を受け取って、配列の最後に2つの値を追加した新しい配列を返す関数 addTwo を作成してください。<br><strong>ヒント:</strong> arr.concat(item1, item2) を使って複数の要素を追加できます。",
+                        example: "addTwo([100], 200, 300) → [100, 200, 300]\naddTwo(['start'], 'middle', 'end') → ['start', 'middle', 'end']",
+                        tests: [
+                            { input: [[100], 200, 300], expected: [100, 200, 300] },
+                            { input: [['start'], 'middle', 'end'], expected: ['start', 'middle', 'end'] },
+                            { input: [[5], 10, 15], expected: [5, 10, 15] }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+        // 全カテゴリを統合
+        const allCategories = [...consoleLogCategories, ...functionCategories];
+
+        // 初期コードを保存する
+        const initialCodes = {};
+
+        // ページ読み込み時に全カテゴリを表示
+        window.onload = function() {
+            renderAllCategories();
+            saveInitialCodes();
+        };
+
+        // 初期コードを保存
+        function saveInitialCodes() {
+            let problemCounter = 0;
+            for (let catIndex = 0; catIndex < allCategories.length; catIndex++) {
+                const category = allCategories[catIndex];
+                for (let probIndex = 0; probIndex < category.problems.length; probIndex++) {
+                    const problem = category.problems[probIndex];
+                    const textarea = document.getElementById(`code-${problemCounter}`);
+                    if (textarea) {
+                        initialCodes[problemCounter] = textarea.value;
+                    }
+                    problemCounter++;
+                }
+            }
+        }
+
+        // リセット機能
+        function resetCode(problemId) {
+            const textarea = document.getElementById(`code-${problemId}`);
+            const resultsDiv = document.getElementById(`results-${problemId}`);
+            if (textarea && initialCodes[problemId]) {
+                textarea.value = initialCodes[problemId];
+                resultsDiv.innerHTML = '';
+            }
+        }
+
+        // 全カテゴリを表示
+        function renderAllCategories() {
+            const mainContent = document.getElementById('mainContent');
+            let html = '';
+            let problemCounter = 0;
+
+            for (let catIndex = 0; catIndex < allCategories.length; catIndex++) {
+                const category = allCategories[catIndex];
+
+                html += `
+                    <div class="category-section">
+                        <div class="category-info">
+                            <h2>${category.title}</h2>
+                            <p>${category.description}</p>
+                        </div>
+                        <div class="problems">
+                `;
+
+                for (let probIndex = 0; probIndex < category.problems.length; probIndex++) {
+                    const problem = category.problems[probIndex];
+                    const problemId = problemCounter;
+                    problemCounter++;
+
+                    if (category.type === 'console') {
+                        // console.log問題 - データ定義をテキストエリアに事前入力
+                        const initialCode = `${problem.data}\n\nconsole.log();`;
+                        html += `
+                            <div class="problem">
+                                <h3>問題 ${problemId + 1}</h3>
+                                <div class="problem-description">
+                                    <p>${problem.description}</p>
+                                </div>
+                                <div class="code-input">
+                                    <textarea id="code-${problemId}" data-initial="${problemId}">${initialCode}</textarea>
+                                </div>
+                                <button class="run-btn" onclick="runConsoleTest(${catIndex}, ${probIndex}, ${problemId})">実行</button>
+                                <button class="run-btn" style="background: #6c757d; margin-left: 10px;" onclick="resetCode(${problemId})">リセット</button>
+                                <div class="results" id="results-${problemId}"></div>
+                            </div>
+                        `;
+                    } else {
+                        // 関数作成問題 - 関数のテンプレートを事前入力
+                        const functionNameMatch = problem.description.match(/関数\s+(\w+)\s+を/);
+                        const functionName = functionNameMatch ? functionNameMatch[1] : 'myFunction';
+
+                        // 引数の数を推定
+                        let params = '';
+                        if (problem.tests && problem.tests[0]) {
+                            const argCount = problem.tests[0].input.length;
+                            const paramNames = ['arr', 'item', 'obj', 'key', 'value', 'a', 'b', 'c', 'name', 'age', 'email', 'price'];
+                            params = paramNames.slice(0, argCount).join(', ');
+                        }
+
+                        const initialCode = `function ${functionName}(${params}) {\n  // ここに処理を書いてください\n  \n  return; // 値を返してください\n}`;
+                        html += `
+                            <div class="problem">
+                                <h3>問題 ${problemId + 1}</h3>
+                                <div class="problem-description">
+                                    <p>${problem.description}</p>
+                                    <div class="example">
+                                        <strong>例:</strong>
+                                        <pre>${problem.example}</pre>
+                                    </div>
+                                </div>
+                                <div class="code-input">
+                                    <textarea id="code-${problemId}" data-initial="${problemId}">${initialCode}</textarea>
+                                </div>
+                                <button class="run-btn" onclick="runFunctionTests(${catIndex}, ${probIndex}, ${problemId})">実行</button>
+                                <button class="run-btn" style="background: #6c757d; margin-left: 10px;" onclick="resetCode(${problemId})">リセット</button>
+                                <div class="results" id="results-${problemId}"></div>
+                            </div>
+                        `;
+                    }
+                }
+
+                html += `
+                        </div>
+                    </div>
+                `;
+
+                // 最後のカテゴリ以外は区切り線を追加
+                if (catIndex < allCategories.length - 1) {
+                    html += '<div class="divider"></div>';
+                }
+            }
+
+            mainContent.innerHTML = html;
+        }
+
+        // console.logテストを実行
+        function runConsoleTest(categoryIndex, problemIndex, problemId) {
+            const category = allCategories[categoryIndex];
+            const problem = category.problems[problemIndex];
+            const code = document.getElementById(`code-${problemId}`).value;
+            const resultsDiv = document.getElementById(`results-${problemId}`);
+
+            resultsDiv.innerHTML = '';
+
+            if (!code.trim()) {
+                resultsDiv.innerHTML = '<div class="test-result error">コードを入力してください。</div>';
+                return;
+            }
+
+            try {
+                // console.logをキャプチャするための変数
+                let consoleOutput = '';
+                const originalLog = console.log;
+                console.log = function(...args) {
+                    consoleOutput = args.map(arg => {
+                        if (typeof arg === 'object') return JSON.stringify(arg);
+                        return String(arg);
+                    }).join(' ');
+                    originalLog.apply(console, args);
+                };
+
+                // データと入力したコードを実行
+                eval(problem.data);
+                eval(code);
+
+                // console.logを元に戻す
+                console.log = originalLog;
+
+                // 期待される出力と比較
+                const expectedOutput = String(problem.expectedOutput);
+                const passed = consoleOutput === expectedOutput;
+
+                if (passed) {
+                    resultsDiv.innerHTML = `
+                        <div class="test-result success">
+                            ✓ 正解！
+                        </div>
+                        <div class="console-output">コンソール出力:\n${consoleOutput}</div>
+                    `;
+                } else {
+                    resultsDiv.innerHTML = `
+                        <div class="test-result failure">
+                            ✗ 不正解
+                            <div class="test-info">期待される出力: ${expectedOutput}</div>
+                            <div class="test-info">実際の出力: ${consoleOutput || '(出力なし)'}</div>
+                        </div>
+                    `;
+                }
+
+            } catch (err) {
+                resultsDiv.innerHTML = `
+                    <div class="test-result error">
+                        エラー: ${err.message}
+                    </div>
+                `;
+            }
+        }
+
+        // 関数テストを実行
+        function runFunctionTests(categoryIndex, problemIndex, problemId) {
+            const category = allCategories[categoryIndex];
+            const problem = category.problems[problemIndex];
+            const code = document.getElementById(`code-${problemId}`).value;
+            const resultsDiv = document.getElementById(`results-${problemId}`);
+
+            resultsDiv.innerHTML = '';
+
+            if (!code.trim()) {
+                resultsDiv.innerHTML = '<div class="test-result error">関数を入力してください。</div>';
+                return;
+            }
+
+            try {
+                // ユーザーのコードを評価
+                eval(code);
+
+                let passedTests = 0;
+                const totalTests = problem.tests.length;
+
+                // 各テストケースを実行
+                problem.tests.forEach((test, index) => {
+                    try {
+                        // 関数名を取得
+                        const functionNameMatch = code.match(/function\s+(\w+)/);
+                        if (!functionNameMatch) {
+                            throw new Error('関数が見つかりません。function キーワードを使って関数を定義してください。');
+                        }
+                        const functionName = functionNameMatch[1];
+
+                        // 関数を実行
+                        const result = eval(`${functionName}(${test.input.map(arg => JSON.stringify(arg)).join(', ')})`);
+                        const expected = test.expected;
+
+                        // 結果を比較
+                        const passed = JSON.stringify(result) === JSON.stringify(expected);
+
+                        if (passed) {
+                            passedTests++;
+                            resultsDiv.innerHTML += `
+                                <div class="test-result success">
+                                    ✓ テスト ${index + 1} 成功
+                                    <div class="test-info">入力: ${JSON.stringify(test.input)} → 結果: ${JSON.stringify(result)}</div>
+                                </div>
+                            `;
+                        } else {
+                            resultsDiv.innerHTML += `
+                                <div class="test-result failure">
+                                    ✗ テスト ${index + 1} 失敗
+                                    <div class="test-info">入力: ${JSON.stringify(test.input)}</div>
+                                    <div class="test-info">期待値: ${JSON.stringify(expected)}</div>
+                                    <div class="test-info">実際の値: ${JSON.stringify(result)}</div>
+                                </div>
+                            `;
+                        }
+                    } catch (err) {
+                        resultsDiv.innerHTML += `
+                            <div class="test-result error">
+                                ✗ テスト ${index + 1} エラー
+                                <div class="test-info">${err.message}</div>
+                            </div>
+                        `;
+                    }
+                });
+
+                // サマリーを表示
+                if (passedTests === totalTests) {
+                    resultsDiv.innerHTML += `<div class="summary">🎉 全てのテストに合格しました！ (${passedTests}/${totalTests})</div>`;
+                } else {
+                    resultsDiv.innerHTML += `<div class="summary">${passedTests}/${totalTests} テスト合格</div>`;
+                }
+
+            } catch (err) {
+                resultsDiv.innerHTML = `
+                    <div class="test-result error">
+                        エラー: ${err.message}
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
